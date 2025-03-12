@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{html,ts,scss}"],
+  content: [],
   theme: {
     extend: {
       fontFamily: {
@@ -21,6 +21,7 @@ export default {
           command: "#8be9fd",
           output: "#f1fa8c",
           error: "#ff5555",
+          title: "#bd93f9",
         },
         editor: {
           bg: "#282a36",

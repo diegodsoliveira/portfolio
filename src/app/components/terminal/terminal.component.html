@@ -3,27 +3,30 @@
   #terminalContainer
 >
   <div *ngFor="let line of terminalService.history()">
-    <span *ngIf="line.type === 'prompt'" class="terminal-prompt">{{
+    <span *ngIf="line.type === 'title'" class="text-terminal-title font-semibold">{{
       line.content
     }}</span>
-    <span *ngIf="line.type === 'command'" class="terminal-command">{{
+    <span *ngIf="line.type === 'prompt'" class="text-terminal-prompt">{{
       line.content
     }}</span>
-    <div *ngIf="line.type === 'output'" class="terminal-output">
+    <span *ngIf="line.type === 'command'" class="text-terminal-command">{{
+      line.content
+    }}</span>
+    <div *ngIf="line.type === 'output'" class="text-terminal-output">
       {{ line.content }}
     </div>
-    <div *ngIf="line.type === 'error'" class="terminal-error">
+    <div *ngIf="line.type === 'error'" class="text-terminal-error">
       {{ line.content }}
     </div>
   </div>
 
   <div class="flex">
-    <span class="terminal-prompt">></span>
+    <span class="text-blue-400 font-semibold mt-4">diego&#64;dev:~$ </span>
     <input
       type="text"
       [(ngModel)]="currentCommand"
       (keyup.enter)="executeCommand()"
-      class="flex-1 bg-transparent border-none outline-none text-terminal-command ml-2"
+      class="flex-1 bg-transparent border-none outline-none text-terminal-command ml-2 mt-3"
       autofocus
       #commandInput
     />

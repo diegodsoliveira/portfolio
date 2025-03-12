@@ -1,12 +1,16 @@
-import { Component, signal } from '@angular/core';
-import { EditorNavComponent } from "../editor-nav/editor-nav.component";
-import { RouterOutlet } from '@angular/router';
-import { CodeFile } from '../../interfaces/code-file';
 import { CommonModule } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { CodeFile } from '../../interfaces/code-file';
+import { EditorNavComponent } from '../editor-nav/editor-nav.component';
+import Prism from  'prismjs';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-json';
+import 'prismjs/components/prism-markup'; // para HTML
 
 @Component({
   selector: 'app-ide',
-  imports: [EditorNavComponent, RouterOutlet, CommonModule],
+  imports: [EditorNavComponent, RouterModule, CommonModule],
   templateUrl: './ide.component.html',
   styleUrl: './ide.component.scss',
 })
@@ -86,9 +90,9 @@ export class IdeComponent {
         '<div class="contact-info">',
         '  <h2>Informações de Contato</h2>',
         '  <ul>',
-        '    <li><strong>Email:</strong> <a href="mailto:seu.email@exemplo.com">seu.email@exemplo.com</a></li>',
-        '    <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/seu-perfil">linkedin.com/in/seu-perfil</a></li>',
-        '    <li><strong>GitHub:</strong> <a href="https://github.com/seu-usuario">github.com/seu-usuario</a></li>',
+        '    <li><strong>Email:</strong> <a href="mailto:diegodsoliveira@gmail.com">diegodsoliveira@gmail.com</a></li>',
+        '    <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/diegodsoliveira/">linkedin.com/in/diegodsoliveira/</a></li>',
+        '    <li><strong>GitHub:</strong> <a href="https://github.com/diegodsoliveira">github.com/diegodsoliveira</a></li>',
         '  </ul>',
         '</div>',
       ],
@@ -101,78 +105,37 @@ export class IdeComponent {
     return this.files()[this.activeFileIndex()];
   }
 
-  highlightSyntax(line: string, language: string): string {
-    // Implementação simples de destaque de sintaxe
-    let highlighted = line;
-
-    if (language === 'typescript') {
-      // Destacar palavras-chave
-      highlighted = highlighted.replace(
-        /(export|class|interface|const|let|function|return|if|else|for|while|import|from|extends|implements)/g,
-        '<span class="text-editor-keyword">$1</span>'
-      );
-
-      // Destacar tipos
-      highlighted = highlighted.replace(
-        /:\s*([A-Za-z]+)(\[\])?/g,
-        ': <span class="text-editor-function">$1$2</span>'
-      );
-
-      // Destacar strings
-      highlighted = highlighted.replace(
-        /(['"`])(.*?)(['"`])/g,
-        '<span class="text-editor-string">$1$2$3</span>'
-      );
-
-      // Destacar números
-      highlighted = highlighted.replace(
-        /\b(\d+)\b/g,
-        '<span class="text-editor-number">$1</span>'
-      );
-
-      // Destacar comentários
-      highlighted = highlighted.replace(
-        /(\/\/.*$)/g,
-        '<span class="text-editor-comment">$1</span>'
-      );
-    } else if (language === 'json') {
-      // Destacar chaves
-      highlighted = highlighted.replace(
-        /"([^"]+)":/g,
-        '"<span class="text-editor-keyword">$1</span>":'
-      );
-
-      // Destacar strings
-      highlighted = highlighted.replace(
-        /("[^"]*")(,)?/g,
-        '<span class="text-editor-string">$1</span>$2'
-      );
-
-      // Destacar números
-      highlighted = highlighted.replace(
-        /\b(\d+)\b/g,
-        '<span class="text-editor-number">$1</span>'
-      );
-    } else if (language === 'html') {
-      // Destacar tags
-      highlighted = highlighted.replace(
-        /(&lt;[\/]?)([a-zA-Z0-9]+)([^&gt;]*&gt;)/g,
-        '$1<span class="text-editor-keyword">$2</span>$3'
-      );
-
-      // Destacar atributos
-      highlighted = highlighted.replace(
-        /(\s)([a-zA-Z0-9-]+)(=)/g,
-        '$1<span class="text-editor-function">$2</span>$3'
-      );
-
-      // Destacar strings
-      highlighted = highlighted.replace(
-        /("[^"]*")/g,
-        '<span class="text-editor-string">$1</span>'
-      );
+  ngOnInit() {
+    // Certifique-se de que o Prism está disponível
+    if (typeof Prism !== 'undefined') {
+      Prism.highlightAll();
     }
+  }
 
-    return highlighted;
+  highlightSyntax(line: string, language: string): string {
+    const languageMap: { [key: string]: string } = {
+      typescript: 'typescript',
+      json: 'json',
+      html: 'markup',
+    };
+
+    const prismLanguage = languageMap[language] || 'markup';
+
+    try {
+      // Verifique se o idioma está carregado
+      if (Prism.languages[prismLanguage]) {
+        return Prism.highlight(
+          line,
+          Prism.languages[prismLanguage],
+          prismLanguage
+        );
+      } else {
+        console.warn(`Idioma '${prismLanguage}' não carregado no Prism`);
+        return line;
+      }
+    } catch (error) {
+      console.error(`Erro ao destacar sintaxe: ${error}`);
+      return line;
+    }
   }
 }

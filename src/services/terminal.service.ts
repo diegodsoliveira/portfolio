@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 
 export interface TerminalLine {
-  type: 'prompt' | 'command' | 'output' | 'error';
+  type: 'prompt' | 'command' | 'output' | 'error' | 'title';
   content: string;
 }
 
@@ -10,9 +10,8 @@ export interface TerminalLine {
 })
 export class TerminalService {
   history = signal<TerminalLine[]>([
-    { type: 'output', content: 'Welcome to Diego Portfolio v1.0.0' },
+    { type: 'title', content: 'Welcome to Diego Portfolio v1.0.0' },
     { type: 'output', content: "Type 'help' to see available commands." },
-    { type: 'prompt', content: '> ' },
   ]);
 
   private readonly availableCommands = {

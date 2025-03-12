@@ -6,7 +6,8 @@
 
 @config "../tailwind.config.js";
 
-/* Use classes personalizadas para cores específicas */
+@import 'prismjs/themes/prism.css';
+
 body {
   @apply bg-terminal-bg text-terminal-text font-mono antialiased m-0 p-0;
 }
