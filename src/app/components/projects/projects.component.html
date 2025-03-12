@@ -1,0 +1,41 @@
+<div class="p-6 font-mono">
+  <h2 class="text-editor-function text-2xl mb-4">Projetos</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div
+      *ngFor="let project of projects"
+      class="bg-editor-line bg-opacity-20 p-4 rounded-md border border-editor-line hover:border-editor-function transition-colors"
+    >
+      <h3 class="text-editor-keyword text-xl mb-2">{{ project.name }}</h3>
+      <p class="text-editor-variable mb-4">{{ project.description }}</p>
+
+      <div class="mb-4 flex flex-wrap gap-2">
+        <span
+          *ngFor="let tech of project.technologies"
+          class="bg-editor-bg px-2 py-1 rounded text-xs text-editor-string"
+        >
+          {{ tech }}
+        </span>
+      </div>
+
+      <div class="flex space-x-4">
+        <a
+          *ngIf="project.repoUrl"
+          [href]="project.repoUrl"
+          target="_blank"
+          class="text-editor-function hover:underline text-sm"
+        >
+          Repositório
+        </a>
+        <a
+          *ngIf="project.demoUrl"
+          [href]="project.demoUrl"
+          target="_blank"
+          class="text-editor-function hover:underline text-sm"
+        >
+          Demo
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="h-full flex bg-editor-bg">
+  <app-editor-nav></app-editor-nav>
+
+  <div class="flex-1 overflow-auto">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<div class="h-full flex flex-col bg-editor-bg">
+  <div class="border-b border-editor-line flex">
+    <div
+      *ngFor="let file of files(); let i = index"
+      (click)="activeFileIndex.set(i)"
+      class="ide-tab"
+      [class.active]="activeFileIndex() === i"
+    >
+      {{ file.name }}
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-auto p-4">
+    <div
+      *ngFor="let line of activeFile.content; let i = index"
+      class="code-line"
+    >
+      <span class="line-number">{{ i + 1 }}</span>
+      <div
+        class="line-content"
+        [innerHTML]="highlightSyntax(line, activeFile.language)"
+      ></div>
+    </div>
+  </div>
+</div>

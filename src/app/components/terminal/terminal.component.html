@@ -1,0 +1,31 @@
+<div
+  class="terminal h-full p-4 font-mono overflow-auto bg-terminal-bg"
+  #terminalContainer
+>
+  <div *ngFor="let line of terminalService.history()">
+    <span *ngIf="line.type === 'prompt'" class="terminal-prompt">{{
+      line.content
+    }}</span>
+    <span *ngIf="line.type === 'command'" class="terminal-command">{{
+      line.content
+    }}</span>
+    <div *ngIf="line.type === 'output'" class="terminal-output">
+      {{ line.content }}
+    </div>
+    <div *ngIf="line.type === 'error'" class="terminal-error">
+      {{ line.content }}
+    </div>
+  </div>
+
+  <div class="flex">
+    <span class="terminal-prompt">></span>
+    <input
+      type="text"
+      [(ngModel)]="currentCommand"
+      (keyup.enter)="executeCommand()"
+      class="flex-1 bg-transparent border-none outline-none text-terminal-command ml-2"
+      autofocus
+      #commandInput
+    />
+  </div>
+</div>
